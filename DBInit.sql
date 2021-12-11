@@ -1,3 +1,15 @@
+DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Admin;
+DROP TABLE IF EXISTS Student;
+DROP TABLE IF EXISTS Tutor;
+DROP TABLE IF EXISTS Availability;
+DROP TABLE IF EXISTS Booking;
+DROP TABLE IF EXISTS Course;
+DROP TABLE IF EXISTS Offering;
+DROP TABLE IF EXISTS Session;
+DROP TABLE IF EXISTS Location;
+
+
 CREATE TABLE User(
 	user_id varchar(8) PRIMARY KEY,
 	f_name varchar(15) not NULL,
@@ -52,7 +64,7 @@ CREATE TABLE Booking(
    	CONSTRAINT Ckacademic_level CHECK (rating BETWEEN 0 AND 5)
 );
 
-CREATE TABLE COURSE(
+CREATE TABLE Course(
 
 	course_code VARCHAR(8) PRIMARY KEY,
 	title VARCHAR(10) not null,
@@ -60,7 +72,7 @@ CREATE TABLE COURSE(
 	price_hr decimal(4,2) not null
 );
 
-CREATE TABLE OFFERING(
+CREATE TABLE Offering(
 
 	tutor_ID VARCHAR(8),
 	course_code VARCHAR(8),
@@ -93,6 +105,6 @@ CREATE TABLE Session(
 
 CREATE TABLE Location(
 	room_num int PRIMARY KEY,
-	Room_seats smallint not NULL DEFAULT 14, 
+	room_seats smallint not NULL DEFAULT 14, 
 );
 
