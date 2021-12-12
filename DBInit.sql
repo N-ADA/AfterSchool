@@ -1,34 +1,40 @@
 -- Dropping tables if they exist
 
-DROP TABLE IF EXISTS User;
-DROP TABLE IF EXISTS Admin;
-DROP TABLE IF EXISTS Student;
-DROP TABLE IF EXISTS Tutor;
-DROP TABLE IF EXISTS Availability;
-DROP TABLE IF EXISTS Booking;
-DROP TABLE IF EXISTS Course;
-DROP TABLE IF EXISTS Offering;
-DROP TABLE IF EXISTS Session;
-DROP TABLE IF EXISTS Location;
+DROP TABLE IF EXISTS Booking CASCADE;
+DROP TABLE IF EXISTS Session CASCADE;
+DROP TABLE IF EXISTS Location CASCADE;
+DROP TABLE IF EXISTS Offering CASCADE;
+DROP TABLE IF EXISTS Course CASCADE;
+DROP TABLE IF EXISTS Admin CASCADE;
+DROP TABLE IF EXISTS Student CASCADE;
+DROP TABLE IF EXISTS Availability CASCADE;
+DROP TABLE IF EXISTS Tutor CASCADE;
+DROP TABLE IF EXISTS Account CASCADE;
+DROP TABLE IF EXISTS Users CASCADE;
+
+
+
+
 
 ------------------------------------------------------------------------------------------
 
 -- Creating tables
 
 CREATE TABLE Account(
-	user_id smallint,
+	user_id smallint Primary Key,
 	password varchar(20)
 );
-CREATE TABLE User(
+
+CREATE TABLE Users(
 	user_id smallint PRIMARY KEY,
 	f_name varchar(15) not NULL,
 	l_name varchar(15) not NULL,
 	phone_num char(10),
-	DOB date not NULL,
+	dob date not NULL,
 	user_type char(1) not NULL,
-	CONSTRAINT CkUser_type CHECK (user_type in ('A', 'S', 'T'))
+	CONSTRAINT CkUser_type CHECK (user_type in ('A', 'S', 'T')),
 	CONSTRAINT accountfk FOREIGN KEY (user_id) REFERENCES Account(user_id) 
-		ON UPDATE CASCADE ON DELETE CASCADE,
+		ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE Admin(
@@ -36,26 +42,26 @@ CREATE TABLE Admin(
 	admin_role char(1) not NULL,
 	hiring_date date not NULL,
 	CONSTRAINT Ckadmin_role CHECK (admin_role in ('S', 'M', 'O'))
-)INHERITS user;
+)INHERITS(users);
 
 
 CREATE TABLE Student(
 	PRIMARY KEY(user_id),
 	attended_hours decimal(5,2) NOT NULL DEFAULT 0,
-	stud_balance decimal(4, 2) NOT NULL,
+	stud_balance decimal(6, 2) NOT NULL Default 500,
 	reg_date date NOT NULL,
 	academic_level varchar(5) NOT NULL,
 	CONSTRAINT Ckacademic_level CHECK (academic_level in ('TC', '1BAC', '2BAC'))
-)INHERITS user;
+)INHERITS(users);
 
 
 CREATE TABLE Tutor(
 	PRIMARY KEY(user_id),
-	balance decimal(5, 2) not NULL DEFAULT 0,
-);
+	balance decimal(5, 2) not NULL DEFAULT 0
+)INHERITS(users);
 
 CREATE TABLE Availability(
-	PRIMARY KEY (av_code),
+	av_code int PRIMARY KEY,
 	av_date date not NULL,
 	start_time time NOT NULL, 
 	end_time time NOT NULL,
@@ -65,33 +71,26 @@ CREATE TABLE Availability(
                       ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE Booking(
-	student_id varchar(8) PRIMARY KEY,
-	session_code varchar(8) PRIMARY KEY,
-	rating smallint,
-	CONSTRAINT booked_by FOREIGN KEY (student_id) REFERENCES Student(user_id)
-                      	ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT creates FOREIGN KEY (session_code) REFERENCES Session(session_code)
-    			ON UPDATE CASCADE ON DELETE CASCADE,
-   	CONSTRAINT Ckacademic_level CHECK (rating BETWEEN 0 AND 5)
-);
-
-CREATE TABLE Course(course_code, title, level, price_hr) VALUES
+CREATE TABLE Course(
 	course_code VARCHAR(8) PRIMARY KEY,
-	title VARCHAR(10) not null,
+	title VARCHAR(30) not null,
 	level VARCHAR(10) not null,
-	price_hr decimal(4,2) not null
+	price_hr decimal(6,2) not null
 );
 
 CREATE TABLE Offering(
-
-	tutor_ID VARCHAR(8),
+	tutor_ID smallint,
 	course_code VARCHAR(8),
-	PRIMARY KEY(tutor_ID, course_code)
+	PRIMARY KEY(tutor_ID, course_code),
 	CONSTRAINT offers FOREIGN KEY (tutor_ID) REFERENCES Tutor(User_ID)
-        		ON UPDATE CASCADE ON DELETE CASCADE
+        		ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT offered_by FOREIGN KEY (course_code) REFERENCES Course(course_code)
         		ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE Location(
+	room_num smallint PRIMARY KEY,
+	room_seats smallint not NULL DEFAULT 14
 );
 
 CREATE TABLE Session(
@@ -102,29 +101,33 @@ CREATE TABLE Session(
 	seats_av smallint not null DEFAULT 14,
 	status VARCHAR(9) not null DEFAULT 'Open',
 	course_code VARCHAR(8),
-	tutor_ID VARCHAR(8),
-	room_num int 
+	tutor_ID smallint,
+	room_num int,
 	CONSTRAINT CKstatus CHECK (status IN ('Open', 'Closed', 'Canceled')),
    	CONSTRAINT timeConstraint CHECK (start_time < end_time),
-	CONSTRAINT corresponds FOREIGN KEY (course_code) REFERENCES OFFERING(course_code)
-        		ON UPDATE CASCADE ON DELETE CASCADE
-    	CONSTRAINT tutored_by FOREIGN KEY (tutor_ID) REFERENCES OFFERING(tutor_ID)
-       	 		ON UPDATE CASCADE ON DELETE CASCADE
-     	CONSTRAINT located in FOREIGN KEY (room_num) REFERENCES Location(room_num)
+	CONSTRAINT corresponds FOREIGN KEY (course_code, tutor_ID) REFERENCES OFFERING(course_code, tutor_ID)
+        		ON UPDATE CASCADE ON DELETE CASCADE,
+     	CONSTRAINT located_in FOREIGN KEY (room_num) REFERENCES Location(room_num)
        		 	ON UPDATE CASCADE ON DELETE CASCADE
-
 );
 
-CREATE TABLE Location(
-	room_num smallint PRIMARY KEY,
-	room_seats smallint not NULL DEFAULT 14, 
+CREATE TABLE Booking(
+	student_id smallint,
+	session_code varchar(8),
+	PRIMARY KEY(session_code, student_id),
+	rating smallint,
+	CONSTRAINT booked_by FOREIGN KEY (student_id) REFERENCES Student(user_id)
+                      	ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT creates FOREIGN KEY (session_code) REFERENCES Session(session_code)
+    			ON UPDATE CASCADE ON DELETE CASCADE,
+   	CONSTRAINT Ckacademic_level CHECK (rating BETWEEN 0 AND 5)
 );
 
 ------------------------------------------------------------------------------------------
 
 -- Inserting into tables
 
-INSRERT INTO Account(user_id, password) VALUES
+INSERT INTO Account(user_id, password) VALUES
   (100, 'saaddr'),
   (101, 'yassirbe'),
   (102, 'khaoulaai'),
@@ -139,38 +142,30 @@ INSRERT INTO Account(user_id, password) VALUES
   (52, 'naimala'),
   (53, 'omarbo'),
   (54, 'fouadzi'),
-  (55, 'abdelmajidrb')
+  (55, 'abdelmajidrb');
 
-INSERT INTO Student(user_id, f_name, l_name, password, phone_num, DOB, user_type) VALUES
-  (100, 'Saad', 'Driouech', '0662097271', '2000-09-15', 'S'),
-  (101, 'Yassir, 'Bendabdellah', '0654789622', '2000-06-14', 'S'),
-  (102, 'Khaoula', 'Ait Soussi', '0614859473', '2000-12-08', 'S'),
-  (103, 'Nada', 'Bounajma', '0638749122', '2001-01-22', 'S'),
-  (104, 'Younes', 'Jamal', '0754399985', '2000-10-01', 'S'),
-  (1, 'Rafah', 'Bennani', '0512846931', '1982-03-28', 'A'), 
-  (10, 'Laila', 'Moustaghit', '0546952132', '1990-06-12', 'A'),
-  (20, 'Mouad', 'Elazizi', '0548623597', '1988-04-30', 'A'),
-  (21, 'Anass', 'Dehbi', '0678549622', '1991-10-24', 'A'),
+INSERT INTO Student(user_id, f_name, l_name, phone_num, DOB, user_type, reg_date, academic_level) VALUES
+  (100, 'Saad', 'Driouech', '0662097271', '2000-09-15', 'S', '2021-09-01', 'TC'),
+  (101, 'Yassir', 'Bendabdellah', '0654789622', '2000-06-14', 'S', '2021-09-01', '1BAC'),
+  (102, 'Khaoula', 'Ait Soussi', '0614859473', '2000-12-08', 'S', '2021-09-01', '2BAC'),
+  (103, 'Nada', 'Bounajma', '0638749122', '2001-01-22', 'S', '2021-09-01', '1BAC'),
+  (104, 'Younes', 'Jamal', '0754399985', '2000-10-01', 'S', '2021-09-01', 'TC');
+
+  
+
+INSERT INTO Admin (user_id, f_name, l_name, phone_num, DOB, user_type, admin_role, hiring_date) VALUES
+  (1, 'Rafah', 'Bennani', '0512846931', '1982-03-28', 'A', 'O', '2018-09-01'),
+  (10, 'Laila', 'Moustaghit', '0546952132', '1990-06-12', 'A', 'M', '2018-09-15'),
+  (20, 'Mouad', 'Elazizi', '0548623597', '1988-04-30', 'A', 'S', '2018-09-15'),
+  (21, 'Anass', 'Dehbi', '0678549622', '1991-10-24', 'A', 'S', '2019-04-01');
+
+INSERT INTO Tutor(user_id, f_name, l_name, phone_num, DOB, user_type) VALUES
   (50, 'Hassan', 'Rouias', '0654896755', '1975-02-14', 'T'),
   (51, 'Wahiba', 'Khassim', '0696342100', '1983-03-03', 'T'),
   (52, 'Naima', 'Laalami', '0675896314', '1978-08-15', 'T'),
   (53, 'Omar', 'Bouchta', '0666128684', '1976-06-06', 'T'),
-  (54, 'Fouad', 'Ziani, '0658669744', '1979-07-12', 'T'),
+  (54, 'Fouad', 'Ziani', '0658669744', '1979-07-12', 'T'),
   (55, 'Abdelmajid', 'Rbib', '0685479123','1976-08-12', 'T');
-
-INSERT INTO Admin (user_id, admin_role, 'hiring_date') VALUES
-  (1, 'O', '2018-09-01'),
-  (10, 'M', '2018-09-15'),
-  (20, 'O', '2018-09-15'),
-  (21, 'O', '2019-04-01');
-
-INSERT INTO Tutor(user_id) VALUES
-  (50),
-  (51),
-  (52),
-  (53),
-  (54),
-  (55);
 
 INSERT INTO Availability(av_code, av_date, start_time, end_time, tutor_id) VALUES
   ('1', '2021-12-20', '18:00:00', '20:00:00', 50),
@@ -187,7 +182,7 @@ INSERT INTO Course (course_code, title, level, price_hr) VALUES
   ('MTH1', 'Math 1 BAC', '1BAC', 250.00),
   ('MTH2', 'Math 2 BAC', '2BAC', 300.00),
   ('PHY1', 'Physique 1 BAC', '1BAC', 200.00),
-  ('PHY1', 'Physique 2 BAC', '2BAC', 280.00),
+  ('PHY2', 'Physique 2 BAC', '2BAC', 280.00),
   ('MTH0', 'Math tronc commun', 'TC', 150.00),
   ('PHY0', 'Physique TC', 'TC', 120.00),
   ('SVT0', 'Science de Vie et Terre TC', 'TC', 100.00),
@@ -213,8 +208,8 @@ INSERT INTO Location(room_num, room_seats) VALUES
   (4, 14);
 
 INSERT INTO Session(session_code, session_date, start_time, end_time, seats_av, status, course_code, tutor_id, room_num) VALUES
-  ('ses1', '2021-12-20', '19:00:00', '20:00:00', 10, 'O', 'MTH1', 50, 1),
-  ('ses2', '2021-12-20', '19:00:00', '20:00:00', 10, 'O', 'MTH1', 50, 1);
+  ('ses1', '2021-12-20', '19:00:00', '20:00:00', 10, 'Open', 'MTH1', 50, 1),
+  ('ses2', '2021-12-20', '19:00:00', '20:00:00', 10, 'Open', 'MTH1', 50, 1);
 
 INSERT INTO Booking(student_id, session_code, rating) VALUES
   (100, 'ses1', 5),
