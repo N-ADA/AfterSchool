@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Book A Session</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="BookNowStyle.css">
+    </head>
+    <body>
+        <div class="progress-container">
+            <ul class="progressbar">
+                <li class="active"> Choose Level and Course
+                    <div class="container">
+                        <div class="level-select-box">
+                            <div class="level-options-container">
+                              <!--repeat this for all the courses-->
+                              <div class="option">
+                                <input type="radio" class="radio" id="tc" name="category"/>
+                                  <label for="tc">Lycée TC</label>
+                              </div>
+                              <div class="option">
+                                <input type="radio" class="radio" id="1bac" name="category"/>
+                                  <label for="1bac">Lycée 1Bac</label>
+                              </div>
+                              <div class="option">
+                                <input type="radio" class="radio" id="2bac" name="category"/>
+                                  <label for="2bac">Lycée 2Bac</label>
+                              </div>
+                              <div class="option">
+                                <input type="radio" class="radio" id="rand1" name="category"/>
+                                  <label for="rand1">level 4</label>
+                              </div>
+                              <div class="option">
+                                <input type="radio" class="radio" id="rand2" name="category"/>
+                                  <label for="rand2">level 6</label>
+                              </div>
+                            </div>
+                            <div class="level-selected">
+                              Select Level
+                            </div>
+                            <div class="level-search-box">
+                              <input type="text" placeholder="Start Typing..." />
+                            </div>
+                        </div>
+                        <div class="course-select-box">
+                            <div class="course-options-container">
+                              <div class="option">
+                                <input type="radio" class="radio" id="mth" name="category"/>
+                                  <label for="mth">Math</label>
+                              </div>
+                              <div class="option">
+                                <input type="radio" class="radio" id="phy" name="category"/>
+                                  <label for="phy">Physics</label>
+                              </div>
+                              <div class="option">
+                                <input type="radio" class="radio" id="che" name="category"/>
+                                  <label for="che">Chemistry</label>
+                              </div>
+                              <div class="option">
+                                <input type="radio" class="radio" id="psy" name="category"/>
+                                  <label for="psy">Psychology</label>
+                              </div>
+                            </div>
+                            <div class="course-selected">
+                              Select Course
+                            </div>
+                            <div class="course-search-box">
+                              <input type="text" placeholder="Start Typing..." />
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>Choose Provider and Time</li>
+                <li>Confirm Booking</li>
+            </ul>
+            <div class="btns">
+                <button class="btn" id="prev" disabled>Prev</button>
+                <button class="btn" id="next">Next</button>
+                <button class="btn" id="cancel">Cancel</button>
+            </div>
+        </div>
+
+
+        
+    </body>
+    <script type="text/javascript" src="main.js"></script>
+</html>
+
+
