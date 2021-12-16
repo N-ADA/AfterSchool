@@ -35,7 +35,6 @@ body, html {
   vertical-align:middle;
   color: #1d1d8c;
 }
-
 .button span {
   cursor: pointer;
   display: inline-block;
@@ -60,7 +59,6 @@ body, html {
   opacity: 1;
   right: 0;
 }
-
 
 .LearnMoreBtn{
   font-size: 16px;
