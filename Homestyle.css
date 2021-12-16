@@ -20,53 +20,45 @@ body, html {
 }
 
 .button {
-  border: none;
-  color: white;
-  padding: 16px 32px;
-  text-align: center;
-  text-decoration: none;
   display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  transition-duration: 0.4s;
+  border-radius: 20px;
+  border-color: #1d1d8c;
+  background-color: white;
+  border : none;
+  text-align: center;
+  font-size: 23px;
+  padding: 10px;
+  width: 240px;
+  transition: all 0.5s;
   cursor: pointer;
-}
- 
-.button1 {
-  background-color: white; 
-  color: black;
-  border: 2px solid #008CBA;
-  border-radius: 20px;
+  margin: 5px;
+  vertical-align:middle;
+  color: #1d1d8c;
 }
 
-
-.button1:hover {
-  background-color: #008CBA;
-  color: white;
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
 }
 
-.button2 {
-  background-color: white; 
-  color: black; 
-  border: 2px solid #008CBA;
-  border-radius: 20px;
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
 }
 
-.button2:hover {
-  background-color: #008CBA;
-  color: white;
+.button:hover span {
+  padding-right: 30px;
 }
 
-.button3 {
-  background-color: white; 
-  color: black; 
-  border: 2px solid #008CBA;
-  border-radius: 20px;
-}
-
-.button3:hover {
-  background-color: #008CBA;
-  color: white;
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
 }
 
 
