@@ -208,11 +208,14 @@ INSERT INTO Location(room_num, room_seats) VALUES
   (4, 14);
 
 INSERT INTO Session(session_code, session_date, start_time, end_time, seats_av, status, course_code, tutor_id, room_num) VALUES
-  ('ses1', '2021-12-20', '19:00:00', '20:00:00', 10, 'Open', 'MTH1', 50, 1),
-  ('ses2', '2021-12-20', '19:00:00', '20:00:00', 10, 'Open', 'MTH1', 50, 1);
+  ('ses1', '2021-12-22', '19:00:00', '20:00:00', 10, 'Open', 'MTH1', 50, 1),
+  ('ses2', '2021-12-22', '20:00:00', '21:00:00', 10, 'Open', 'PHY1', 52, 1),
+  ('ses3', '2021-12-23', '18:00:00', '19:30:00', 5, 'Open', 'MTH1', 50, 1);
 
 INSERT INTO Booking(student_id, session_code, rating) VALUES
   (100, 'ses1', 5),
+  (100, 'ses2', 5),
+  (100, 'ses3', 4),
   (101, 'ses1', 4),
   (103, 'ses1', 5),
   (102, 'ses2', 3);

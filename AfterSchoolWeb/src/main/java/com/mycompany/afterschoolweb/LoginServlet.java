@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.naming.*;
 import javax.sql.*;
 import java.sql.*;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -24,6 +26,11 @@ public class LoginServlet extends HttpServlet {
 
     String id;
     String password;
+    LocalDate dt = LocalDate.now();
+    LocalTime tm = LocalTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH mm ss");
+    String text = tm.format(formatter);
+    LocalTime parsedTime = LocalTime.parse(text, formatter);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -64,6 +71,7 @@ public class LoginServlet extends HttpServlet {
         out.println("<link href=\"https://file.myfontastic.com/7vRKgqrN3iFEnLHuqYhYuL/icons.css\" rel=\"stylesheet\">");
 
         out.println("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js\"></script>");
+        out.println("<link rel=\"shortcut icon\" href=\"pictures/logo.png\" />");
         out.println("</head>");
 
         try {
@@ -83,7 +91,7 @@ public class LoginServlet extends HttpServlet {
                         out.println("<body data-spy=\"scroll\" data-target=\"#navbar-nav-header\" class=\"static-layout\">");
                         out.println("<div class = \"row\">");
                         out.println("<div class = \"col-md-6 col-sm-4\">\n"
-                                + "     <h2 style=\"color: white; font-family:;\"><i>&ensp;<u>After School</u></i></h2>\n"
+                                + "     <h2 style=\"color: white; font-family:cursive;\"><i>&ensp;After School</i></h2>\n"
                                 + "  </div> ");
 
                         out.println("<div class = \"col-md-6 col-sm-4\">");
@@ -106,7 +114,9 @@ public class LoginServlet extends HttpServlet {
                         out.println("<h1 style=\"color: white\"><br>Learn Without Limits<br>with After School</h1>");
                         out.println("<br><br><br><br><br>");
                         out.println("<h4 style=\"color : white\">Get Started Now!</h4>");
+                        out.println("<form method='post' action='./booksession'>");
                         out.println("<button class=\"button\" style=\"vertical-align:middle; color: #1d1d8c\"><span>Book Session</span></button>");
+                        out.println("</form>");
                         out.println("</div>");
                         out.println("</div>");
 
@@ -114,15 +124,15 @@ public class LoginServlet extends HttpServlet {
                         out.println("<br><h2>Upcoming Sessions. . .</h2>");
                         out.println("<br><br>");
                         Statement stmt2 = conn.createStatement();
-                        ResultSet res = stmt2.executeQuery("SELECT course_code, room_num FROM Booking NATURAL JOIN Session WHERE student_id = " + i + ";");
+                        ResultSet res = stmt2.executeQuery("SELECT course_code, room_num FROM Booking NATURAL JOIN Session WHERE student_id = " + i + " AND start_time > '" + parsedTime + "' AND session_date > '"  + dt + "';");
                         out.println("<div class=\"scroll\">");
-                        out.println("<h6 style=\"color: #141470\">");
-                        while(res.next()){
+                        out.println("<h5 style=\"color: #141470\">");
+                        while (res.next()) {
                             String n = res.getString("course_code");
                             String nm = res.getString("room_num");
-                            out.println("<img src=\"pictures/arrow.png\" height=\"20\">" + n + " | " + nm + "<br><br>");
+                            out.println("<img src=\"pictures/arrow.png\" height=\"20\">" + n + " | Room: " + nm + "<br><br>");
                         }
-                        out.println("</h6>");
+                        out.println("</h5>");
                         out.println("</div>");
                         out.println("</div>");
                         out.println("</div>");
@@ -131,30 +141,53 @@ public class LoginServlet extends HttpServlet {
                         out.println("<div class=\"container\">");
                         out.println("<div class=\"section-content\">");
                         out.println("<div class=\"row\">");
-                        out.println("<div class=\"col-md-3 col-sm-6 counter-item\">");
-                        out.println("<span class=\"number\" data-from=\"0\" data-to=\"34\" data-refresh-interval=\"100\">14</span>");
-                        out.println("<h4>Attended Hours</h4>");
-                        out.println("</div>");
-                        out.println("<div class=\"col-md-3 col-sm-6 counter-item\">");
-                        out.println("<span class=\"number\" data-from=\"0\" data-to=\"32\" data-refresh-interval=\"100\">32</span>");
-                        out.println("<h4>Booked Sessions</h4>");
-                        out.println("</div>");
-                        out.println("<div class=\"col-md-3 col-sm-6 counter-item\">");
-                        out.println("<span class=\"number\" data-from=\"0\" data-to=\"38\" data-refresh-interval=\"100\">38</span>");
-                        out.println("<h4>Most Booked Course</h4>");
-                        out.println("</div>");
-                        out.println("<div class=\"col-md-3 col-sm-6 counter-item\">");
-                        out.println("<span class=\"number\" data-from=\"0\" data-to=\"29\" data-refresh-interval=\"100\">29</span>");
-                        out.println("<h4>Balance</h4>");
-                        out.println("</div>");
+                        Statement stmt3 = conn.createStatement();
+                        ResultSet stats = stmt3.executeQuery("SELECT attended_hours, stud_balance FROM Student WHERE user_id = " + i + ";");
+                        Statement stmt4 = conn.createStatement();
+                        ResultSet ses = stmt4.executeQuery("SELECT COUNT(session_code) AS cnt FROM Student AS S JOIN Booking AS B ON S.user_id = B.student_id WHERE S.user_id= " + i + ";");
+                        Statement stmt5 = conn.createStatement();
+                        ResultSet mostses = stmt5.executeQuery("SELECT course_code, count(course_code) AS cnt FROM Student AS S JOIN Booking AS B ON S.user_id = B.student_id NATURAL JOIN SESSION WHERE S.user_id = " + i + "GROUP BY course_code ORDER BY cnt DESC LIMIT 1;");
+                        if (stats.next()) {
+                            out.println("<div class=\"col-md-3 col-sm-6 counter-item\">");
+                            out.println("<span class=\"number\" data-from=\"0\" data-to=\"34\" data-refresh-interval=\"100\">" + stats.getString("attended_hours") + "</span>");
+                            out.println("<h4>Attended Hours</h4>");
+                            out.println("</div>");
+                            out.println("<div class=\"col-md-3 col-sm-6 counter-item\">");
+                            out.println("<span class=\"number\" data-from=\"0\" data-to=\"29\" data-refresh-interval=\"100\">" + stats.getString("stud_balance") + "</span>");
+                            out.println("<h4>Balance</h4>");
+                            out.println("</div>");
+                        }
+                        if(ses.next()){
+                            out.println("<div class=\"col-md-3 col-sm-6 counter-item\">");
+                            out.println("<span class=\"number\" data-from=\"0\" data-to=\"32\" data-refresh-interval=\"100\">" + ses.getString("cnt") + "</span>");
+                            out.println("<h4>Booked Sessions</h4>");
+                            out.println("</div>");
+                        }
+                        else{
+                            out.println("<div class=\"col-md-3 col-sm-6 counter-item\">");
+                            out.println("<span class=\"number\" data-from=\"0\" data-to=\"32\" data-refresh-interval=\"100\">0</span>");
+                            out.println("<h4>Booked Sessions</h4>");
+                            out.println("</div>");
+                        }
+                        if(mostses.next()){
+                            out.println("<div class=\"col-md-3 col-sm-6 counter-item\">");
+                            out.println("<span class=\"number\" data-from=\"0\" data-to=\"38\" data-refresh-interval=\"100\">" + mostses.getString("course_code") + "</span>");
+                            out.println("<h4>Most Booked Course</h4>");
+                            out.println("</div>");
+                        }
+                        else{
+                            out.println("<div class=\"col-md-3 col-sm-6 counter-item\">");
+                            out.println("<span class=\"number\" data-from=\"0\" data-to=\"38\" data-refresh-interval=\"100\">None</span>");
+                            out.println("<h4>Most Booked Course</h4>");
+                            out.println("</div>");
+                        }
                         out.println("</div>");
                         out.println("</div>");
                         out.println("</div>");
                         out.println("</section>");
                         out.println("</section>");
                         out.println("</div>");
-                    }
-                    else{
+                    } else {
                         out.println("<p> NO SUCH USER </p>");
                         out.println("<a href=\"Loginpage.html\"> Go back to login page </a></div>");
                     }
