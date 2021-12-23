@@ -164,7 +164,7 @@ INSERT INTO Admin (user_id, user_fname, user_lname, user_phonenum, user_dob, use
   (21, 'Anass', 'Dehbi', '0678549622', '1991-10-24', 'A', 'S', '2019-04-01');
 
 INSERT INTO Tutor(user_id, user_fname, user_lname, user_phonenum, user_dob, user_type, tutor_level) VALUES
-  (50, 'Hassan', 'Rouias', '0654896755', '1975-02-14', 'T', 'TC'),
+  (50, 'Hassan', 'Rouias', '0654896755', '1975-02-14', 'T', '1BAC'),
   (51, 'Wahiba', 'Khassim', '0696342100', '1983-03-03', 'T', 'TC'),
   (52, 'Naima', 'Laalami', '0675896314', '1978-08-15', 'T', '1BAC'),
   (53, 'Omar', 'Bouchta', '0666128684', '1976-06-06', 'T', '2BAC'),
@@ -182,7 +182,8 @@ INSERT INTO Availability(av_code, av_date, av_start_time, av_end_time, tutor_id)
   ('8', '2021-12-22', '18:30:00', '20:30:00', 54),
   ('9', '2021-12-20', '18:30:00', '19:30:00', 50),
   ('10', '2021-12-22', '19:00:00', '20:00:00', 50),
-  ('11', '2021-12-23', '18:00:00', '19:30:00', 50);
+  ('11', '2021-12-23', '18:00:00', '19:30:00', 50),
+  ('12', '2021-12-22', '20:00:00', '21:00:00', 52);
   
 
 INSERT INTO Course (course_code, course_title, course_level, course_price_hr) VALUES 
