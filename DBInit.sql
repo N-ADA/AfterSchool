@@ -22,15 +22,15 @@ DROP TABLE IF EXISTS Users CASCADE;
 
 CREATE TABLE Account(
 	user_id smallint Primary Key,
-	password varchar(20)
+	user_password varchar(20)
 );
 
 CREATE TABLE Users(
 	user_id smallint PRIMARY KEY,
-	f_name varchar(15) not NULL,
-	l_name varchar(15) not NULL,
-	phone_num char(10),
-	dob date not NULL,
+	user_fname varchar(15) not NULL,
+	user_lname varchar(15) not NULL,
+	user_phonenum char(10),
+	user_dob date not NULL,
 	user_type char(1) not NULL,
 	CONSTRAINT CkUser_type CHECK (user_type in ('A', 'S', 'T')),
 	CONSTRAINT accountfk FOREIGN KEY (user_id) REFERENCES Account(user_id) 
@@ -40,7 +40,7 @@ CREATE TABLE Users(
 CREATE TABLE Admin(
 	PRIMARY KEY(user_id),
 	admin_role char(1) not NULL,
-	hiring_date date not NULL,
+	admin_hiring_date date not NULL,
 	CONSTRAINT Ckadmin_role CHECK (admin_role in ('S', 'M', 'O'))
 )INHERITS(users);
 
@@ -48,7 +48,7 @@ CREATE TABLE Admin(
 CREATE TABLE Student(
 	PRIMARY KEY(user_id),
 	attended_hours decimal(5,2) NOT NULL DEFAULT 0,
-	stud_balance decimal(6, 2) NOT NULL Default 500,
+	stud_balance int NOT NULL Default 500,
 	reg_date date NOT NULL,
 	academic_level varchar(5) NOT NULL,
 	CONSTRAINT Ckacademic_level CHECK (academic_level in ('TC', '1BAC', '2BAC'))
@@ -57,25 +57,28 @@ CREATE TABLE Student(
 
 CREATE TABLE Tutor(
 	PRIMARY KEY(user_id),
-	balance decimal(5, 2) not NULL DEFAULT 0
+	tutor_balance int not NULL DEFAULT 0,
+	tutor_level VARCHAR(10) not null,
+	CONSTRAINT Cklevel CHECK (tutor_level in ('TC', '1BAC', '2BAC'))
 )INHERITS(users);
 
 CREATE TABLE Availability(
 	av_code int PRIMARY KEY,
 	av_date date not NULL,
-	start_time time NOT NULL, 
-	end_time time NOT NULL,
+	av_start_time time NOT NULL, 
+	av_end_time time NOT NULL,
 	tutor_id smallint NOT NULL,
-	CONSTRAINT timeConstraint CHECK (start_time < end_time),
+	CONSTRAINT timeConstraint CHECK (av_start_time < av_end_time),
 	CONSTRAINT available_at FOREIGN KEY (tutor_id) REFERENCES Tutor(user_id)
                       ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE Course(
 	course_code VARCHAR(8) PRIMARY KEY,
-	title VARCHAR(30) not null,
-	level VARCHAR(10) not null,
-	price_hr decimal(6,2) not null
+	course_title VARCHAR(30) not null,
+	course_level VARCHAR(10) not null,
+	course_price_hr int not null,
+	CONSTRAINT Cklevel CHECK (course_level in ('TC', '1BAC', '2BAC'))
 );
 
 CREATE TABLE Offering(
@@ -96,10 +99,10 @@ CREATE TABLE Location(
 CREATE TABLE Session(
 	session_code VARCHAR(8) PRIMARY KEY,
 	session_date date not null,
-	start_Time time NOT NULL, 
-	end_Time time NOT NULL,
-	seats_av smallint not null DEFAULT 14,
-	status VARCHAR(9) not null DEFAULT 'Open',
+	session_start_Time time NOT NULL, 
+	session_end_Time time NOT NULL,
+	session_seats_av smallint not null DEFAULT 14,
+	session_status VARCHAR(9) not null DEFAULT 'Open',
 	course_code VARCHAR(8),
 	tutor_ID smallint,
 	room_num int,
@@ -127,7 +130,7 @@ CREATE TABLE Booking(
 
 -- Inserting into tables
 
-INSERT INTO Account(user_id, password) VALUES
+INSERT INTO Account(user_id, user_password) VALUES
   (100, 'saaddr'),
   (101, 'yassirbe'),
   (102, 'khaoulaai'),
@@ -144,7 +147,7 @@ INSERT INTO Account(user_id, password) VALUES
   (54, 'fouadzi'),
   (55, 'abdelmajidrb');
 
-INSERT INTO Student(user_id, f_name, l_name, phone_num, DOB, user_type, reg_date, academic_level) VALUES
+INSERT INTO Student(user_id, user_fname, user_lname, user_phonenum, user_dob, user_type, reg_date, academic_level) VALUES
   (100, 'Saad', 'Driouech', '0662097271', '2000-09-15', 'S', '2021-09-01', 'TC'),
   (101, 'Yassir', 'Bendabdellah', '0654789622', '2000-06-14', 'S', '2021-09-01', '1BAC'),
   (102, 'Khaoula', 'Ait Soussi', '0614859473', '2000-12-08', 'S', '2021-09-01', '2BAC'),
@@ -153,13 +156,13 @@ INSERT INTO Student(user_id, f_name, l_name, phone_num, DOB, user_type, reg_date
 
   
 
-INSERT INTO Admin (user_id, f_name, l_name, phone_num, DOB, user_type, admin_role, hiring_date) VALUES
+INSERT INTO Admin (user_id, user_fname, user_lname, user_phonenum, user_dob, user_type, admin_role, hiring_date) VALUES
   (1, 'Rafah', 'Bennani', '0512846931', '1982-03-28', 'A', 'O', '2018-09-01'),
   (10, 'Laila', 'Moustaghit', '0546952132', '1990-06-12', 'A', 'M', '2018-09-15'),
   (20, 'Mouad', 'Elazizi', '0548623597', '1988-04-30', 'A', 'S', '2018-09-15'),
   (21, 'Anass', 'Dehbi', '0678549622', '1991-10-24', 'A', 'S', '2019-04-01');
 
-INSERT INTO Tutor(user_id, f_name, l_name, phone_num, DOB, user_type) VALUES
+INSERT INTO Tutor(user_id, user_fname, user_lname, user_phonenum, user_dob, user_type) VALUES
   (50, 'Hassan', 'Rouias', '0654896755', '1975-02-14', 'T'),
   (51, 'Wahiba', 'Khassim', '0696342100', '1983-03-03', 'T'),
   (52, 'Naima', 'Laalami', '0675896314', '1978-08-15', 'T'),
@@ -167,7 +170,7 @@ INSERT INTO Tutor(user_id, f_name, l_name, phone_num, DOB, user_type) VALUES
   (54, 'Fouad', 'Ziani', '0658669744', '1979-07-12', 'T'),
   (55, 'Abdelmajid', 'Rbib', '0685479123','1976-08-12', 'T');
 
-INSERT INTO Availability(av_code, av_date, start_time, end_time, tutor_id) VALUES
+INSERT INTO Availability(av_code, av_date, av_start_time, av_end_time, tutor_id) VALUES
   ('1', '2021-12-20', '18:00:00', '20:00:00', 50),
   ('2', '2021-12-21', '19:00:00', '20:30:00', 50),
   ('3', '2021-12-21', '19:00:00', '20:30:00', 51),
@@ -178,7 +181,7 @@ INSERT INTO Availability(av_code, av_date, start_time, end_time, tutor_id) VALUE
   ('8', '2021-12-22', '18:30:00', '20:30:00', 54),
   ('9', '2021-12-20', '18:30:00', '19:30:00', 50);
 
-INSERT INTO Course (course_code, title, level, price_hr) VALUES 
+INSERT INTO Course (course_code, course_title, course_level, course_price_hr) VALUES 
   ('MTH1', 'Math 1 BAC', '1BAC', 250.00),
   ('MTH2', 'Math 2 BAC', '2BAC', 300.00),
   ('PHY1', 'Physique 1 BAC', '1BAC', 200.00),
@@ -207,7 +210,7 @@ INSERT INTO Location(room_num, room_seats) VALUES
   (3, 18),
   (4, 14);
 
-INSERT INTO Session(session_code, session_date, start_time, end_time, seats_av, status, course_code, tutor_id, room_num) VALUES
+INSERT INTO Session(session_code, session_date, session_start_time, session_end_time, session_seats_av, session_status, course_code, tutor_id, room_num) VALUES
   ('ses1', '2021-12-22', '19:00:00', '20:00:00', 10, 'Open', 'MTH1', 50, 1),
   ('ses2', '2021-12-22', '20:00:00', '21:00:00', 10, 'Open', 'PHY1', 52, 1),
   ('ses3', '2021-12-23', '18:00:00', '19:30:00', 5, 'Open', 'MTH1', 50, 1);
