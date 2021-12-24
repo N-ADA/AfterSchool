@@ -201,15 +201,14 @@ INSERT INTO Course (course_code, course_title, course_level, course_price_hr) VA
 
 INSERT INTO Offering(tutor_id, course_code) VALUES
   (50, 'MTH1'),
-  (50, 'MTH0'),
-  (51, 'MTH2'),
-  (52, 'PHY0'),
+  (51, 'MTH0'),
   (52, 'PHY1'),
-  (52, 'PHY2'),
-  (53, 'SVT0'),
-  (53, 'SVT1'),
-  (54, 'SVT1'),
-  (54, 'SVT2');
+  (52, 'PHY1'),
+  (52, 'PHY1'),
+  (53, 'SVT2'),
+  (53, 'SVT2'),
+  (54, 'SVT0'),
+  (54, 'SVT0');
 
 INSERT INTO Location(room_num, room_seats) VALUES
   (1, 15),
