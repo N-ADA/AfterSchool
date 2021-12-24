@@ -169,7 +169,7 @@ INSERT INTO Tutor(user_id, user_fname, user_lname, user_phonenum, user_dob, user
   (52, 'Naima', 'Laalami', '0675896314', '1978-08-15', 'T', '1BAC'),
   (53, 'Omar', 'Bouchta', '0666128684', '1976-06-06', 'T', '2BAC'),
   (54, 'Fouad', 'Ziani', '0658669744', '1979-07-12', 'T', 'TC'),
-  (55, 'Abdelmajid', 'Rbib', '0685479123','1976-08-12', 'T', 'TC');
+  (55, 'Abdelmajid', 'Rbib', '0685479123','1976-08-12', 'T', '1BAC');
 
 INSERT INTO Availability(av_code, av_date, av_start_time, av_end_time, tutor_id) VALUES
   (1, '2021-12-20', '18:00:00', '20:00:00', 50),
