@@ -87,7 +87,6 @@ CREATE TABLE Offering(
 	CONSTRAINT offered_by FOREIGN KEY (course_code) REFERENCES Course(course_code)
         		ON UPDATE CASCADE ON DELETE CASCADE
 );
-
 CREATE TABLE Location(
 	room_num smallint PRIMARY KEY,
 	room_seats smallint not NULL DEFAULT 14
@@ -268,12 +267,10 @@ INSERT INTO Booking(student_id, session_code) VALUES
   (102, 'ses11'),
   (103, 'ses11'),
   (105, 'ses11');
-  
-  
   --------------------------------------------------------------------------------------------------------
   -- Functionalities and Triggers
   
-CREATE OR REPLACE FUNCTION inheritanceCheck() RETURNS TRIGGER
+  CREATE or replace FUNCTION inheritanceCheck() RETURNS TRIGGER
 AS $$
     DECLARE
     is_exist boolean;
@@ -291,17 +288,13 @@ END;
 $$
 LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS InheritanceStudentTr ON student CASCADE;
+
 CREATE TRIGGER InheritanceStudentTr BEFORE INSERT ON student
     FOR EACH ROW
     EXECUTE FUNCTION inheritanceCheck();
-    
-DROP TRIGGER IF EXISTS InheritanceProfessorTr ON Tutor CASCADE;
 CREATE TRIGGER InheritanceProfessorTr BEFORE INSERT ON Tutor
     FOR EACH ROW
     EXECUTE FUNCTION inheritanceCheck();
-    
-DROP TRIGGER IF EXISTS InheritanceAdminTr ON Admin CASCADE;    
 CREATE TRIGGER InheritanceAdminTr BEFORE INSERT ON Admin
     FOR EACH ROW
     EXECUTE FUNCTION inheritanceCheck();
@@ -325,19 +318,12 @@ DROP TRIGGER IF EXISTS addhourTR ON session CASCADE;
 create trigger addHourTR after insert on session
 for each row
 execute function addHourTutor();
-
 ---------------------------------------------------------------------------------
 ----- Add hour to the student 
 
-create or replace function addHourTutor() returns trigger
-as $$
-declare
-	duration int;
-	st int;
-	en int;
-	select * from session
-begin	
-	
+create or replace function addHourStudent() returns trigger
+as $$  
+begin		
 	update student
 	set attended_hours = attended_hours + 1
 	where user_ID = new.student_ID;
@@ -351,6 +337,61 @@ create trigger addHourTr after insert on booking
 for each row
 execute function addHour();
 
+  
+
+----------------------------------------------------------------------------------------------
+--------- PROCEDURES TO CREATE USERS
+CREATE OR REPLACE Procedure createStudent (fn varchar(15),ln varchar(15),phone_num varchar(10), dob date, uType varchar(1), hrs decimal(5,2), balance decimal(6,2) default 500.00, registration date, lvl varchar(5), password_F varchar(30), email_F varchar(30))
+	LANGUAGE plpgsql
+	  AS $$
+    DECLARE 
+    id smallInt;
+    BEGIN
+            insert Into account(password) 
+            Values(password_F) returning user_ID into id;
+            insert into student(user_Id ,first_Name, last_Name, phone)Values
+            (id,email_F,fn,ln,phoneNumber);
+END;
+$$;
+
+CREATE OR REPLACE Procedure createAdmin (fn varchar(15),ln varchar(15),password_F varchar(30),email_F varchar(30),phonenumber varchar(14) default NULL)
+	LANGUAGE plpgsql
+	  AS $$
+    DECLARE 
+    id smallInt;
+    BEGIN
+            insert Into account(password) 
+            Values(password_F) returning userID into id;
+            insert into Admin(userId,email,firstName,lastName,phone)Values
+            (id,email_F,fn,ln,phoneNumber);
+END;
+$$;
+CREATE OR REPLACE Procedure createProfessor (fn varchar(15),ln varchar(15),password_F varchar(30),email_F varchar(30),phonenumber varchar(14) default NULL)
+	LANGUAGE plpgsql
+	  AS $$
+    DECLARE 
+    id smallInt;
+    BEGIN
+            insert Into account(password) 
+            Values(password_F) returning userID into id;
+            insert into Professor (userId,email,firstName,lastName,phone)Values
+            (id,email_F,fn,ln,phoneNumber);
+END;
+$$;
+
+---------------------------------------------------------------------------------------------
+-- Views
+------ Displaying Tutor for Students OR tutor for tutor
+
+create view displayTutor as 
+select user_fname, user_lname, tutor_level from tutor;
+
+------ displaying student for tutor or studnt for student
+
+create view displayStudent as
+select user_fname, user_lname, reg_date, academic_level from student;
+
+------ 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------
 ------ Procedure to create Student
@@ -361,15 +402,14 @@ CREATE OR REPLACE Procedure createStudent (id smallint, password_F varchar(20),f
 	cur_date date;
 	utype char(1);
     BEGIN
-	select CURRENT_DATE INTO cur_date;
-	utype='S';
-        insert Into account(user_id, user_password) 
-        Values(id,password_F);
-        insert into student(user_id,user_fname,user_lname,user_phonenum,user_dob,user_type,reg_date,academic_level)Values
+			select CURRENT_DATE INTO cur_date;
+			utype='S';
+            insert Into account(user_id, user_password) 
+            Values(id,password_F);
+            insert into student(user_id,user_fname,user_lname,user_phonenum,user_dob,user_type,reg_date,academic_level)Values
             (id,fn,ln,phoneNumber,dob,utype,cur_date,academic_lvl);
 END;
 $$;
-
 -----------------------------------------------------------------------------------------------------------------------------------------------
 ------ Procedure to create Admin
 CREATE OR REPLACE Procedure createAdmin (id smallint, upassword varchar(20), fn varchar(15),ln varchar(15),phonenumber varchar(10),dob date,adrole char(1))
@@ -387,7 +427,6 @@ CREATE OR REPLACE Procedure createAdmin (id smallint, upassword varchar(20), fn 
             (id,fn,ln,phonenumber,dob,utype,adrole,cur_date);
 END;
 $$;
-
 -----------------------------------------------------------------------------------------------------------------------------------------------
 ------ Procedure to create Tutor
 CREATE OR REPLACE Procedure createTutor (id smallint, upassword varchar(20), fn varchar(15),ln varchar(15),phonenumber varchar(10),dob date,lvl varchar(10))
@@ -406,6 +445,7 @@ CREATE OR REPLACE Procedure createTutor (id smallint, upassword varchar(20), fn 
 END;
 $$;
 
+
 -----------------------------------------------------------------------------------------------------------------------------------------------
 ------ Indexes
 Create index studName on student (user_fname, user_lname);
@@ -414,16 +454,3 @@ create index tutorLvl on tutor (tutor_level);
 Create index sessionDate on session (session_date);
 Create index courseTitle on course (course_title);
 
----------------------------------------------------------------------------------------------
--- Views
------- Displaying Tutor for Students OR tutor for tutor
-
-create view displayTutor as 
-select user_fname, user_lname, tutor_level from tutor;
-
------- displaying student for tutor or studnt for student
-
-create view displayStudent as
-select user_fname, user_lname, reg_date, academic_level from student;
-
------- 
