@@ -12,11 +12,6 @@ DROP TABLE IF EXISTS Tutor CASCADE;
 DROP TABLE IF EXISTS Users CASCADE;
 DROP TABLE IF EXISTS Account CASCADE;
 
-
-
-
-
-
 ------------------------------------------------------------------------------------------
 
 -- Creating tables
@@ -119,7 +114,7 @@ CREATE TABLE Booking(
 	student_id smallint,
 	session_code varchar(8),
 	PRIMARY KEY(session_code, student_id),
-	rating smallint,
+	rating smallint DEFAULT 5,
 	CONSTRAINT booked_by FOREIGN KEY (student_id) REFERENCES Student(user_id)
                       	ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT creates FOREIGN KEY (session_code) REFERENCES Session(session_code)
@@ -172,21 +167,21 @@ INSERT INTO Tutor(user_id, user_fname, user_lname, user_phonenum, user_dob, user
   (55, 'Abdelmajid', 'Rbib', '0685479123','1976-08-12', 'T', '1BAC');
 
 INSERT INTO Availability(av_code, av_date, av_start_time, av_end_time, tutor_id) VALUES
-  (1, '2021-12-20', '18:00:00', '20:00:00', 50),
-  (2, '2021-12-21', '19:00:00', '20:30:00', 50),
-  (3, '2021-12-21', '19:00:00', '20:30:00', 51),
-  (4, '2021-12-21', '18:00:00', '20:00:00', 51),
-  (5, '2021-12-20', '19:00:00', '20:30:00', 52),
-  (6, '2021-12-22', '18:30:00', '20:30:00', 53),
-  (7, '2021-12-22', '20:30:00', '21:30:00', 53),
-  (8, '2021-12-22', '18:30:00', '20:30:00', 54),
-  (9, '2021-12-20', '18:30:00', '19:30:00', 50),
-  (10, '2021-12-22', '19:00:00', '20:00:00', 50),
-  (11, '2021-12-23', '18:00:00', '19:30:00', 50),
-  (12, '2021-12-22', '20:00:00', '21:00:00', 52),
-  (13, '2021-12-24', '9:00:00', '11:00:00', 50),
-  (14, '2021-12-24', '10:00:00', '12:00:00', 52),
-  (15, '2021-12-21', '19:00:00', '20:00:00', 55);
+  (1, '2021-12-20', '6:00:00 PM', '8:00:00 PM', 50),
+  (2, '2021-12-21', '7:00:00 PM', '8:30:00 PM', 50),
+  (3, '2021-12-21', '7:00:00 PM', '8:30:00 PM', 51),
+  (4, '2021-12-21', '6:00:00 PM', '8:00:00 PM', 51),
+  (5, '2021-12-20', '7:00:00 PM', '8:30:00 PM', 52),
+  (6, '2021-12-22', '6:30:00 PM', '8:30:00 PM', 53),
+  (7, '2021-12-22', '8:30:00 PM', '9:30:00 PM', 53),
+  (8, '2021-12-22', '6:30:00 PM', '8:30:00 PM', 54),
+  (9, '2021-12-20', '6:30:00 PM', '7:30:00 PM', 50),
+  (10, '2021-12-22', '7:00:00 PM', '8:00:00 PM', 50),
+  (11, '2021-12-23', '6:00:00 PM', '7:30:00 PM', 50),
+  (12, '2021-12-22', '8:00:00 PM', '9:00:00 PM', 52),
+  (13, '2021-12-24', '9:00:00 AM', '11:00:00 AM', 50),
+  (14, '2021-12-24', '10:00:00 AM', '12:00:00 PM', 52),
+  (15, '2021-12-21', '7:00:00 PM', '8:00:00 PM', 55);
   
 
 INSERT INTO Course (course_code, course_title, course_level, course_price_hr) VALUES 
@@ -210,19 +205,22 @@ INSERT INTO Offering(tutor_id, course_code) VALUES
 
 INSERT INTO Location(room_num, room_seats) VALUES
   (1, 15),
-  (2, 7),
-  (3, 18),
-  (4, 14);
+  (2, 15),
+  (3, 20),
+  (4, 15),
+  (5, 4);
 
 INSERT INTO Session(session_code, session_date, session_start_time, session_end_time, session_seats_av, session_status, course_code, tutor_id, room_num) VALUES
-  ('ses1', '2021-12-22', '19:00:00', '20:00:00', 10, 'Open', 'MTH1', 50, 1),
-  ('ses2', '2021-12-22', '20:00:00', '21:00:00', 10, 'Open', 'PHY1', 52, 1),
-  ('ses3', '2021-12-23', '18:00:00', '19:30:00', 5, 'Open', 'MTH1', 50, 1);
+  ('ses1', '2021-12-22', '07:00:00 PM', '08:00:00 PM', 11, 'Open', 'MTH1', 50, 1),
+  ('ses2', '2021-12-22', '08:00:00 PM', '09:00:00 PM', 13, 'Open', 'PHY1', 52, 1),
+  ('ses3', '2021-12-23', '06:00:00 PM', '07:30:00 PM', 14, 'Open', 'MTH1', 50, 1),
+  ('ses4', '2021-12-01', '05:00:00 PM', '07:00:00 PM', 3, 'Closed', 'SVT0', 54, 1);
 
-INSERT INTO Booking(student_id, session_code, rating) VALUES
-  (100, 'ses1', 5),
-  (100, 'ses2', 5),
-  (100, 'ses3', 4),
-  (101, 'ses1', 4),
-  (103, 'ses1', 5),
-  (102, 'ses2', 3);
+INSERT INTO Booking(student_id, session_code) VALUES
+  (100, 'ses1'),
+  (100, 'ses2'),
+  (100, 'ses3'),
+  (101, 'ses1'),
+  (103, 'ses1'),
+  (102, 'ses2'),
+  (104, 'ses1');
