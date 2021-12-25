@@ -44,7 +44,7 @@ CREATE TABLE Admin(
 CREATE TABLE Student(
 	PRIMARY KEY(user_id),
 	attended_hours decimal(5,2) NOT NULL DEFAULT 0,
-	stud_balance int NOT NULL Default 500,
+	stud_balance decimal(6,2) int NOT NULL Default 500,
 	reg_date date NOT NULL,
 	academic_level varchar(5) NOT NULL,
 	CONSTRAINT Ckacademic_level CHECK (academic_level in ('TC', '1BAC', '2BAC'))
@@ -53,8 +53,9 @@ CREATE TABLE Student(
 
 CREATE TABLE Tutor(
 	PRIMARY KEY(user_id),
-	tutor_balance int not NULL DEFAULT 0,
+	tutor_balance decimal(6,2) not NULL DEFAULT 0,
 	tutor_level VARCHAR(10) not null,
+	tutor_work_hours decimal(5,2) NOT NULL DEFAULT 0,
 	CONSTRAINT Cklevel CHECK (tutor_level in ('TC', '1BAC', '2BAC'))
 )INHERITS(users);
 
@@ -64,6 +65,8 @@ CREATE TABLE Availability(
 	av_start_time time NOT NULL, 
 	av_end_time time NOT NULL,
 	tutor_id smallint NOT NULL,
+	av_status VARCHAR(9) not null DEFAULT 'Unbooked',
+	CONSTRAINT CKstatus CHECK (av_status IN ('Open', 'Closed', 'Unbooked', 'Done')),
 	CONSTRAINT timeConstraint CHECK (av_start_time < av_end_time),
 	CONSTRAINT available_at FOREIGN KEY (tutor_id) REFERENCES Tutor(user_id)
                       ON UPDATE CASCADE ON DELETE CASCADE
@@ -132,6 +135,8 @@ INSERT INTO Account(user_id, user_password) VALUES
   (102, 'khaoulaai'),
   (103, 'nadabo'),
   (104, 'younesja'),
+  (105, 'ikramai'),
+  (106, 'hamzaai'),
   (1, 'rafahbe'),
   (10, 'lailamo'),
   (11, 'mouadel'),
@@ -141,16 +146,20 @@ INSERT INTO Account(user_id, user_password) VALUES
   (52, 'naimala'),
   (53, 'omarbo'),
   (54, 'fouadzi'),
-  (55, 'abdelmajidrb');
+  (55, 'abdelmajidrb'),
+  (56, 'ibrahimih'),
+  (57, 'ahmadbo'),
+  (58, 'bouchrali'),
+  (59, 'saidana');
 
 INSERT INTO Student(user_id, user_fname, user_lname, user_phonenum, user_dob, user_type, reg_date, academic_level) VALUES
   (100, 'Saad', 'Driouech', '0662097271', '2000-09-15', 'S', '2021-09-01', 'TC'),
   (101, 'Yassir', 'Bendabdellah', '0654789622', '2000-06-14', 'S', '2021-09-01', '1BAC'),
   (102, 'Khaoula', 'Ait Soussi', '0614859473', '2000-12-08', 'S', '2021-09-01', '2BAC'),
   (103, 'Nada', 'Bounajma', '0638749122', '2001-01-22', 'S', '2021-09-01', '1BAC'),
-  (104, 'Younes', 'Jamal', '0754399985', '2000-10-01', 'S', '2021-09-01', 'TC');
-
-  
+  (104, 'Younes', 'Jamal', '0754399985', '2000-10-01', 'S', '2021-09-01', 'TC'),
+  (105, 'Ikram', 'Ainan', '0627313835', '2006-10-01', 'S', '2021-09-01', 'TC'),
+  (106, 'Hamza', 'Aisour', '0738273462', '2006-10-01', 'S', '2021-09-01', 'TC');
 
 INSERT INTO Admin (user_id, user_fname, user_lname, user_phonenum, user_dob, user_type, admin_role, admin_hiring_date) VALUES
   (1, 'Rafah', 'Bennani', '0512846931', '1982-03-28', 'A', 'O', '2018-09-01'),
@@ -164,24 +173,28 @@ INSERT INTO Tutor(user_id, user_fname, user_lname, user_phonenum, user_dob, user
   (52, 'Naima', 'Laalami', '0675896314', '1978-08-15', 'T', '1BAC'),
   (53, 'Omar', 'Bouchta', '0666128684', '1976-06-06', 'T', '2BAC'),
   (54, 'Fouad', 'Ziani', '0658669744', '1979-07-12', 'T', 'TC'),
-  (55, 'Abdelmajid', 'Rbib', '0685479123','1976-08-12', 'T', '1BAC');
+  (55, 'Abdelmajid', 'Rbib', '0685479123','1976-08-12', 'T', '1BAC'),
+  (56, 'Ibrahim', 'Ih', '0672934853', '1969-07-12', 'T', '1BAC'),
+  (57, 'Ahmad', 'Bouguern', '0689253627', '1980-02-01', 'T', '2BAC'),
+  (58, 'Bouchra', 'Liman', '0678392748', '1962-03-12', 'T', 'TC'),
+  (59, 'Saida', 'Nasir', '0678362819', '1964-08-14', 'T', '2BAC');
 
-INSERT INTO Availability(av_code, av_date, av_start_time, av_end_time, tutor_id) VALUES
-  (1, '2021-12-20', '6:00:00 PM', '8:00:00 PM', 50),
-  (2, '2021-12-21', '7:00:00 PM', '8:30:00 PM', 50),
-  (3, '2021-12-21', '7:00:00 PM', '8:30:00 PM', 51),
-  (4, '2021-12-21', '6:00:00 PM', '8:00:00 PM', 51),
-  (5, '2021-12-20', '7:00:00 PM', '8:30:00 PM', 52),
-  (6, '2021-12-22', '6:30:00 PM', '8:30:00 PM', 53),
-  (7, '2021-12-22', '8:30:00 PM', '9:30:00 PM', 53),
-  (8, '2021-12-22', '6:30:00 PM', '8:30:00 PM', 54),
-  (9, '2021-12-20', '6:30:00 PM', '7:30:00 PM', 50),
-  (10, '2021-12-22', '7:00:00 PM', '8:00:00 PM', 50),
-  (11, '2021-12-23', '6:00:00 PM', '7:30:00 PM', 50),
-  (12, '2021-12-22', '8:00:00 PM', '9:00:00 PM', 52),
-  (13, '2021-12-24', '9:00:00 AM', '11:00:00 AM', 50),
-  (14, '2021-12-24', '10:00:00 AM', '12:00:00 PM', 52),
-  (15, '2021-12-21', '7:00:00 PM', '8:00:00 PM', 55);
+INSERT INTO Availability(av_code, av_date, av_start_time, av_end_time, tutor_id, av_status) VALUES
+  (1, '2021-12-29', '6:00:00 PM', '8:00:00 PM', 50, 'Open'),
+  (2, '2021-12-27', '7:00:00 PM', '8:30:00 PM', 50, 'Open'),
+  (3, '2021-12-29', '7:00:00 PM', '8:30:00 PM', 51, 'Unbooked'),
+  (4, '2021-12-28', '5:00:00 PM', '7:00:00 PM', 51, 'Open'),
+  (5, '2021-12-20', '7:00:00 PM', '8:30:00 PM', 52, 'Done'),
+  (6, '2021-12-27', '5:30:00 PM', '6:30:00 PM', 53, 'Closed'),
+  (7, '2021-12-26', '8:30:00 PM', '9:30:00 PM', 53, 'Open'),
+  (8, '2021-12-31', '6:30:00 PM', '8:30:00 PM', 54, 'Unbooked'),
+  (9, '2021-12-30', '6:30:00 PM', '7:30:00 PM', 50, 'Unbooked'),
+  (10, '2021-12-27', '7:00:00 PM', '8:00:00 PM', 59, 'Open'),
+  (11, '2021-12-28', '6:00:00 PM', '7:30:00 PM', 57, 'Unbooked'),
+  (12, '2021-12-22', '8:00:00 PM', '9:00:00 PM', 56, 'Done'),
+  (13, '2021-12-29', '9:00:00 AM', '11:00:00 AM', 57, 'Open'),
+  (14, '2022-01-02', '10:00:00 AM', '12:00:00 PM', 58, 'Closed'),
+  (15, '2021-12-21', '7:00:00 PM', '8:00:00 PM', 55, 'Done');
   
 
 INSERT INTO Course (course_code, course_title, course_level, course_price_hr) VALUES 
@@ -201,7 +214,11 @@ INSERT INTO Offering(tutor_id, course_code) VALUES
   (52, 'PHY1'),
   (53, 'SVT2'),
   (54, 'SVT0'),
-  (55, 'MTH1');
+  (55, 'MTH1'),
+  (56, 'SVT1'), 
+  (57, 'MTH2'),
+  (58, 'PHY0'),
+  (59, 'PHY2');
 
 INSERT INTO Location(room_num, room_seats) VALUES
   (1, 15),
@@ -211,16 +228,45 @@ INSERT INTO Location(room_num, room_seats) VALUES
   (5, 4);
 
 INSERT INTO Session(session_code, session_date, session_start_time, session_end_time, session_seats_av, session_status, course_code, tutor_id, room_num) VALUES
-  ('ses1', '2021-12-22', '07:00:00 PM', '08:00:00 PM', 11, 'Open', 'MTH1', 50, 1),
-  ('ses2', '2021-12-22', '08:00:00 PM', '09:00:00 PM', 13, 'Open', 'PHY1', 52, 1),
-  ('ses3', '2021-12-23', '06:00:00 PM', '07:30:00 PM', 14, 'Open', 'MTH1', 50, 1),
-  ('ses4', '2021-12-01', '05:00:00 PM', '07:00:00 PM', 3, 'Closed', 'SVT0', 54, 1);
+  ('ses1', '2021-12-29', '6:00:00 PM', '8:00:00 PM', 10 , 'Open', 'MTH1', 50, 1),
+  ('ses2', '2021-12-27', '7:00:00 PM', '8:30:00 PM', 13, 'Open', 'MTH1', 50, 1),
+  ('ses3', '2021-12-28', '5:00:00 PM', '7:00:00 PM', 13, 'Open', 'MTH0', 51, 1),
+  ('ses4', '2021-12-20', '7:00:00 PM', '8:30:00 PM', 12, 'Done', 'PHY1', 52, 2),
+  ('ses5', '2021-12-27', '5:30:00 PM', '6:30:00 PM', 0, 'Closed', 'SVT2', 53, 1),
+  ('ses6', '2021-12-26', '8:30:00 PM', '9:30:00 PM', 14, 'Open', 'SVT2', 53, 1),
+  ('ses7', '2021-12-27', '7:00:00 PM', '8:00:00 PM', 12, 'Open', 'PHY2', 59, 3),
+  ('ses8', '2021-12-22', '8:00:00 PM', '9:00:00 PM', 11, 'Done', 'SVT1', 56, 1),
+  ('ses9', '2021-12-29', '9:00:00 AM', '11:00:00 AM', 13, 'Open', 'MTH2', 57, 1),
+  ('ses10', '2022-01-02', '10:00:00 AM', '12:00:00 PM', 0, 'Closed', 'PHY0' , 58, 3),
+  ('ses11', '2021-12-21', '7:00:00 PM', '8:00:00 PM', 10, 'Done', 'MTH1', 55, 1);
 
 INSERT INTO Booking(student_id, session_code) VALUES
   (100, 'ses1'),
-  (100, 'ses2'),
-  (100, 'ses3'),
   (101, 'ses1'),
+  (102, 'ses1'),
   (103, 'ses1'),
-  (102, 'ses2'),
-  (104, 'ses1');
+  (105, 'ses1'),
+  (100, 'ses2'),
+  (101, 'ses2'),
+  (104, 'ses3'),
+  (106, 'ses3'), 
+  (100, 'ses4'),
+  (101, 'ses4'),
+  (102, 'ses4'),
+  (103, 'ses5'),
+  (105, 'ses6'),
+  (102, 'ses7'),
+  (103, 'ses7'),
+  (104, 'ses7'),
+  (106, 'ses8'),
+  (102, 'ses8'),
+  (103, 'ses8'),
+  (105, 'ses8'),
+  (100, 'ses9'),
+  (101, 'ses9'),
+  (104, 'ses10'),
+  (104, 'ses11'),
+  (106, 'ses11'),
+  (102, 'ses11'),
+  (103, 'ses11'),
+  (105, 'ses11');
