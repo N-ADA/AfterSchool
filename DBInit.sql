@@ -12,8 +12,7 @@ DROP TABLE IF EXISTS Tutor CASCADE;
 DROP TABLE IF EXISTS Users CASCADE;
 DROP TABLE IF EXISTS Account CASCADE;
 
-------------------------------------------------------------------------------------------
-
+-----------------------------------------------------------------------------------------------------------------
 -- Creating tables
 
 CREATE TABLE Account(
@@ -39,7 +38,6 @@ CREATE TABLE Admin(
 	admin_hiring_date date not NULL,
 	CONSTRAINT Ckadmin_role CHECK (admin_role in ('S', 'M', 'O'))
 )INHERITS(users);
-
 
 CREATE TABLE Student(
 	PRIMARY KEY(user_id),
@@ -89,7 +87,7 @@ CREATE TABLE Offering(
 	CONSTRAINT offered_by FOREIGN KEY (course_code) REFERENCES Course(course_code)
         		ON UPDATE CASCADE ON DELETE CASCADE
 );
-
+select * from displaystudent
 CREATE TABLE Location(
 	room_num smallint PRIMARY KEY,
 	room_seats smallint not NULL DEFAULT 14
@@ -354,7 +352,7 @@ for each row
 execute function addHour();
 ----------------------------------------------------------------------------------------------
 --------- PROCEDURES TO CREATE USERS
-CREATE OR REPLACE Procedure createStudent (fn varchar(15),ln varchar(15),phone num varchar(10), dob date, uType varchar(1), hrs decimal(5,2), balance decimal(6,2) default 500.00, registration date, lvl varchar(5), password_F varchar(30), email_F varchar(30))
+CREATE OR REPLACE Procedure createStudent (fn varchar(15),ln varchar(15),phone_num varchar(10), dob date, uType varchar(1), hrs decimal(5,2), balance decimal(6,2) default 500.00, registration date, lvl varchar(5), password_F varchar(30), email_F varchar(30))
 	LANGUAGE plpgsql
 	  AS $$
     DECLARE 
@@ -442,11 +440,12 @@ END;
 $$;
 -----------------------------------------------------------------------------------------------------------------------------------------------
 ------ Procedure to create Tutor
-CREATE OR REPLACE Procedure createProfessor (id smallint, upassword varchar(20), fn varchar(15),ln varchar(15),phonenumber varchar(10),dob date,lvl varchar(10))
+CREATE OR REPLACE Procedure createTutor (id smallint, upassword varchar(20), fn varchar(15),ln varchar(15),phonenumber varchar(10),dob date,lvl varchar(10))
 	LANGUAGE plpgsql
 	  AS $$
     DECLARE 
-	utype char(1);
+		utype char(1);
+		cur_date date;
     BEGIN
             select CURRENT_DATE INTO cur_date;
 			utype='T';
