@@ -180,21 +180,21 @@ INSERT INTO Tutor(user_id, user_fname, user_lname, user_phonenum, user_dob, user
   (59, 'Saida', 'Nasir', '0678362819', '1964-08-14', 'T', '2BAC');
 
 INSERT INTO Availability(av_code, av_date, av_start_time, av_end_time, tutor_id, av_status) VALUES
-  (1, '2021-12-29', '18:00:00', '20:00:00', 50, 'Open'),
-  (2, '2021-12-27', '19:00:00', '20:00:00', 50, 'Open'),
-  (3, '2021-12-29', '19:30:00', '20:30:00', 51, 'Unbooked'),
-  (4, '2021-12-28', '17:00:00', '18:00:00', 51, 'Open'),
-  (5, '2021-12-20', '19:30:00', '20:30:00', 52, 'Done'),
-  (6, '2021-12-27', '17:30:00', '18:30:00', 53, 'Closed'),
-  (7, '2021-12-26', '20:30:00', '21:30:00', 53, 'Open'),
-  (8, '2021-12-31', '18:30:00', '19:30:00', 54, 'Unbooked'),
-  (9, '2021-12-30', '18:30:00', '19:30:00', 50, 'Unbooked'),
-  (10, '2021-12-27', '19:00:00', '20:00:00', 59, 'Open'),
-  (11, '2021-12-28', '18:00:00', '19:00:00', 57, 'Unbooked'),
-  (12, '2021-12-22', '20:00:00', '21:00:00', 56, 'Done'),
-  (13, '2021-12-29', '21:00:00', '22:00:00', 57, 'Open'),
-  (14, '2022-01-02', '22:00:00', '23:00:00', 58, 'Closed'),
-  (15, '2021-12-21', '19:00:00', '20:00:00', 55, 'Done');
+  (1, '2021-12-29', '6:00:00 PM', '7:00:00 PM', 50, 'Open'),
+  (2, '2021-12-27', '7:00:00 PM', '8:00:00 PM', 50, 'Open'),
+  (3, '2021-12-29', '7:00:00 PM', '8:00:00 PM', 51, 'Unbooked'),
+  (4, '2021-12-28', '5:00:00 PM', '6:00:00 PM', 51, 'Open'),
+  (5, '2021-12-20', '7:00:00 PM', '8:00:00 PM', 52, 'Done'),
+  (6, '2021-12-27', '5:30:00 PM', '6:30:00 PM', 53, 'Closed'),
+  (7, '2021-12-26', '8:30:00 PM', '9:30:00 PM', 53, 'Open'),
+  (8, '2021-12-31', '6:30:00 PM', '7:30:00 PM', 54, 'Unbooked'),
+  (9, '2021-12-30', '6:30:00 PM', '7:30:00 PM', 50, 'Unbooked'),
+  (10, '2021-12-27', '7:00:00 PM', '8:00:00 PM', 59, 'Open'),
+  (11, '2021-12-28', '6:00:00 PM', '7:00:00 PM', 57, 'Unbooked'),
+  (12, '2021-12-22', '8:00:00 PM', '9:00:00 PM', 56, 'Done'),
+  (13, '2021-12-29', '9:00:00 AM', '11:00:00 AM', 57, 'Open'),
+  (14, '2022-01-02', '10:00:00 AM', '12:00:00 PM', 58, 'Closed'),
+  (15, '2021-12-21', '7:00:00 PM', '8:00:00 PM', 55, 'Done');
   
 
 INSERT INTO Course (course_code, course_title, course_level, course_price_hr) VALUES 
@@ -228,17 +228,17 @@ INSERT INTO Location(room_num, room_seats) VALUES
   (5, 4);
 
 INSERT INTO Session(session_code, session_date, session_start_time, session_end_time, session_seats_av, session_status, course_code, tutor_id, room_num) VALUES
-  ('ses1', '2021-12-29', '19:00:00', '20:00:00', 10 , 'Open', 'MTH1', 50, 1),
-  ('ses2', '2021-12-27', '19:30:00', '20:30:00', 13, 'Open', 'MTH1', 50, 1),
-  ('ses3', '2021-12-28', '17:00:00', '18:00:00', 13, 'Open', 'MTH0', 51, 1),
-  ('ses4', '2021-12-20', '19:00:00', '20:00:00', 12, 'Done', 'PHY1', 52, 2),
-  ('ses5', '2021-12-27', '17:30:00', '18:30:00', 0, 'Closed', 'SVT2', 53, 1),
-  ('ses6', '2021-12-26', '20:30:00', '21:30:00', 14, 'Open', 'SVT2', 53, 1),
-  ('ses7', '2021-12-27', '19:00:00', '20:00:00', 12, 'Open', 'PHY2', 59, 3),
-  ('ses8', '2021-12-22', '20:00:00', '21:00:00', 11, 'Done', 'SVT1', 56, 1),
-  ('ses9', '2021-12-29', '21:00:00', '22:00:00', 13, 'Open', 'MTH2', 57, 1),
-  ('ses10', '2022-01-02', '22:00:00', '23:00:00', 0, 'Closed', 'PHY0' , 58, 3),
-  ('ses11', '2021-12-21', '19:00:00', '20:00:00', 10, 'Done', 'MTH1', 55, 1);
+  ('ses1', '2021-12-29', '6:00:00 PM', '8:00:00 PM', 10 , 'Open', 'MTH1', 50, 1),
+  ('ses2', '2021-12-27', '7:00:00 PM', '8:00:00 PM', 13, 'Open', 'MTH1', 50, 1),
+  ('ses3', '2021-12-28', '5:00:00 PM', '7:00:00 PM', 13, 'Open', 'MTH0', 51, 1),
+  ('ses4', '2021-12-20', '7:00:00 PM', '8:00:00 PM', 12, 'Done', 'PHY1', 52, 2),
+  ('ses5', '2021-12-27', '5:30:00 PM', '6:30:00 PM', 0, 'Closed', 'SVT2', 53, 1),
+  ('ses6', '2021-12-26', '8:30:00 PM', '9:30:00 PM', 14, 'Open', 'SVT2', 53, 1),
+  ('ses7', '2021-12-27', '7:00:00 PM', '8:00:00 PM', 12, 'Open', 'PHY2', 59, 3),
+  ('ses8', '2021-12-22', '8:00:00 PM', '9:00:00 PM', 11, 'Done', 'SVT1', 56, 1),
+  ('ses9', '2021-12-29', '9:00:00 AM', '10:00:00 AM', 13, 'Open', 'MTH2', 57, 1),
+  ('ses10', '2022-01-02', '10:00:00 AM', '11:00:00 PM', 0, 'Closed', 'PHY0' , 58, 3),
+  ('ses11', '2021-12-21', '7:00:00 PM', '8:00:00 PM', 10, 'Done', 'MTH1', 55, 1);
 
 INSERT INTO Booking(student_id, session_code) VALUES
   (100, 'ses1'),
@@ -270,3 +270,198 @@ INSERT INTO Booking(student_id, session_code) VALUES
   (102, 'ses11'),
   (103, 'ses11'),
   (105, 'ses11');
+  
+  
+  --------------------------------------------------------------------------------------------------------
+  -- Functionalities and Triggers
+  
+  CREATE FUNCTION inheritanceCheck() RETURNS TRIGGER
+AS $$
+    DECLARE
+    is_exist boolean;
+BEGIN
+    SELECT true INTO is_exist 
+    FROM Admin  AS P FULL OUTER JOIN Tutor AS M ON P.User_ID = M.User_ID FULL OUTER JOIN Student AS A ON A.User_ID = M.User_ID
+    WHERE P.User_ID = NEW.User_ID OR M.User_ID = NEW.User_ID  OR A.User_ID = NEW.User_ID ;
+
+    IF is_exist = true  THEN
+        RAISE EXCEPTION 'This user already exist.';
+    END IF;
+    RETURN NEW;
+
+END;
+$$
+LANGUAGE plpgsql;
+
+
+CREATE TRIGGER InheritanceStudentTr BEFORE INSERT ON student
+    FOR EACH ROW
+    EXECUTE FUNCTION inheritanceCheck();
+CREATE TRIGGER InheritanceProfessorTr BEFORE INSERT ON Tutor
+    FOR EACH ROW
+    EXECUTE FUNCTION inheritanceCheck();
+CREATE TRIGGER InheritanceAdminTr BEFORE INSERT ON Admin
+    FOR EACH ROW
+    EXECUTE FUNCTION inheritanceCheck();
+	
+	
+---------------------------------------------------
+---- Add hour to the tutor
+create or replace function addHourTutor () returns trigger
+as $$
+begin	 
+	update tutor
+	set tutor_work_hours = tutor_work_hours + 1 
+	where user_ID = new.tutor_id;
+	return new;
+	
+end;
+$$
+language plpgsql; 
+
+DROP TRIGGER IF EXISTS addhourTR ON session CASCADE;
+create trigger addHourTR after insert on session
+for each row
+execute function addHourTutor();
+---------------------------------------------------------------------------------
+----- Add hour to the student 
+
+create or replace function addHourTutor() returns trigger
+as $$
+declare
+	duration int;
+	st int;
+	en int;
+	select * from session
+begin	
+ 	st = to_char((select distinct session_start_time from booking natural join session as s where new.session_code = s.session_code), 'YYYYMMDD')::integer;
+ 	en = to_char((select distinct session_end_time from booking natural join session as s where new.session_code = s.session_code), 'YYYYMMDD')::integer;
+ 	duration = en - st;
+ 	raise notice 'start % -- end %', st, en;
+-- 	raise notice 'duration %', duration;
+	
+	update student
+	set attended_hours = attended_hours + 1
+	where user_ID = new.student_ID;
+	return new;
+end;
+$$
+language plpgsql;
+
+DROP TRIGGER IF EXISTS addhourTR ON booking CASCADE;
+create trigger addHourTr after insert on booking
+for each row
+execute function addHour();
+----------------------------------------------------------------------------------------------
+--------- PROCEDURES TO CREATE USERS
+CREATE OR REPLACE Procedure createStudent (fn varchar(15),ln varchar(15),phone num varchar(10), dob date, uType varchar(1), hrs decimal(5,2), balance decimal(6,2) default 500.00, registration date, lvl varchar(5), password_F varchar(30), email_F varchar(30))
+	LANGUAGE plpgsql
+	  AS $$
+    DECLARE 
+    id smallInt;
+    BEGIN
+            insert Into account(password) 
+            Values(password_F) returning user_ID into id;
+            insert into student(user_Id ,first_Name, last_Name, phone)Values
+            (id,email_F,fn,ln,phoneNumber);
+END;
+$$;
+
+CREATE OR REPLACE Procedure createAdmin (fn varchar(15),ln varchar(15),password_F varchar(30),email_F varchar(30),phonenumber varchar(14) default NULL)
+	LANGUAGE plpgsql
+	  AS $$
+    DECLARE 
+    id smallInt;
+    BEGIN
+            insert Into account(password) 
+            Values(password_F) returning userID into id;
+            insert into Admin(userId,email,firstName,lastName,phone)Values
+            (id,email_F,fn,ln,phoneNumber);
+END;
+$$;
+CREATE OR REPLACE Procedure createProfessor (fn varchar(15),ln varchar(15),password_F varchar(30),email_F varchar(30),phonenumber varchar(14) default NULL)
+	LANGUAGE plpgsql
+	  AS $$
+    DECLARE 
+    id smallInt;
+    BEGIN
+            insert Into account(password) 
+            Values(password_F) returning userID into id;
+            insert into Professor (userId,email,firstName,lastName,phone)Values
+            (id,email_F,fn,ln,phoneNumber);
+END;
+$$;
+
+---------------------------------------------------------------------------------------------
+-- Views
+------ Displaying Tutor for Students OR tutor for tutor
+
+create view displayTutor as 
+select user_fname, user_lname, tutor_level from tutor;
+
+------ displaying student for tutor or studnt for student
+
+create view displayStudent as
+select user_fname, user_lname, reg_date, academic_level from student;
+
+------ 
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+------ Procedure to create Student
+CREATE OR REPLACE Procedure createStudent (id smallint, password_F varchar(20),fn varchar(15),ln varchar(15),phonenumber varchar(10),dob date,academic_lvl varchar(5))
+	LANGUAGE plpgsql
+	  AS $$
+    DECLARE 
+	cur_date date;
+	utype char(1);
+    BEGIN
+			select CURRENT_DATE INTO cur_date;
+			utype='S';
+            insert Into account(user_id, user_password) 
+            Values(id,password_F);
+            insert into student(user_id,user_fname,user_lname,user_phonenum,user_dob,user_type,reg_date,academic_level)Values
+            (id,fn,ln,phoneNumber,dob,utype,cur_date,academic_lvl);
+END;
+$$;
+-----------------------------------------------------------------------------------------------------------------------------------------------
+------ Procedure to create Admin
+CREATE OR REPLACE Procedure createAdmin (id smallint, upassword varchar(20), fn varchar(15),ln varchar(15),phonenumber varchar(10),dob date,adrole char(1))
+	LANGUAGE plpgsql
+	  AS $$
+    DECLARE 
+    cur_date date;
+	utype char(1);
+    BEGIN
+		    select CURRENT_DATE INTO cur_date;
+			utype='A';
+            insert Into account(user_id, user_password) 
+            Values(id,upassword);
+            insert into Admin(user_id,user_fname,user_lname,user_phonenum,user_dob,user_type,admin_role,admin_hiring_date)Values
+            (id,fn,ln,phonenumber,dob,utype,adrole,cur_date);
+END;
+$$;
+-----------------------------------------------------------------------------------------------------------------------------------------------
+------ Procedure to create Tutor
+CREATE OR REPLACE Procedure createProfessor (id smallint, upassword varchar(20), fn varchar(15),ln varchar(15),phonenumber varchar(10),dob date,lvl varchar(10))
+	LANGUAGE plpgsql
+	  AS $$
+    DECLARE 
+	utype char(1);
+    BEGIN
+            select CURRENT_DATE INTO cur_date;
+			utype='T';
+            insert Into account(user_id, user_password) 
+            Values(id,upassword);
+            insert into Tutor(user_id,user_fname,user_lname,user_phonenum,user_dob,user_type,tutor_level)Values
+            (id,fn,ln,phonenumber,dob,utype,lvl);
+END;
+$$;
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+------ Indexes
+Create index studName on student (user_fname, user_lname);
+Create index tutorName on tutor (user_fname, user_lname);
+create index tutorLvl on tutor (tutor_level);
+Create index sessionDate on session (session_date);
+Create index courseTitle on course (course_title);
