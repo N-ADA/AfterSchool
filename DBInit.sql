@@ -337,11 +337,6 @@ declare
 	en int;
 	select * from session
 begin	
- 	st = to_char((select distinct session_start_time from booking natural join session as s where new.session_code = s.session_code), 'YYYYMMDD')::integer;
- 	en = to_char((select distinct session_end_time from booking natural join session as s where new.session_code = s.session_code), 'YYYYMMDD')::integer;
- 	duration = en - st;
- 	raise notice 'start % -- end %', st, en;
--- 	raise notice 'duration %', duration;
 	
 	update student
 	set attended_hours = attended_hours + 1
