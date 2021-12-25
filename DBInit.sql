@@ -44,7 +44,7 @@ CREATE TABLE Admin(
 CREATE TABLE Student(
 	PRIMARY KEY(user_id),
 	attended_hours decimal(5,2) NOT NULL DEFAULT 0,
-	stud_balance decimal(6,2) int NOT NULL Default 500,
+	stud_balance decimal(6,2) NOT NULL Default 500,
 	reg_date date NOT NULL,
 	academic_level varchar(5) NOT NULL,
 	CONSTRAINT Ckacademic_level CHECK (academic_level in ('TC', '1BAC', '2BAC'))
