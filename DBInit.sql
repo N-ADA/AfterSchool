@@ -105,7 +105,7 @@ CREATE TABLE Session(
 	course_code VARCHAR(8),
 	tutor_ID smallint,
 	room_num int,
-	CONSTRAINT CKstatus CHECK (session_status IN ('Open', 'Closed', 'Canceled')),
+	CONSTRAINT CKstatus CHECK (session_status IN ('Open', 'Closed', 'Canceled', 'Done')),
    	CONSTRAINT timeConstraint CHECK (session_start_time < session_end_time),
 	CONSTRAINT corresponds FOREIGN KEY (course_code, tutor_ID) REFERENCES OFFERING(course_code, tutor_ID)
         		ON UPDATE CASCADE ON DELETE CASCADE,
