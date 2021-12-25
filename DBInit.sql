@@ -337,48 +337,6 @@ create trigger addHourTr after insert on booking
 for each row
 execute function addHour();
 
-  
-
-----------------------------------------------------------------------------------------------
---------- PROCEDURES TO CREATE USERS
-CREATE OR REPLACE Procedure createStudent (fn varchar(15),ln varchar(15),phone_num varchar(10), dob date, uType varchar(1), hrs decimal(5,2), balance decimal(6,2) default 500.00, registration date, lvl varchar(5), password_F varchar(30), email_F varchar(30))
-	LANGUAGE plpgsql
-	  AS $$
-    DECLARE 
-    id smallInt;
-    BEGIN
-            insert Into account(password) 
-            Values(password_F) returning user_ID into id;
-            insert into student(user_Id ,first_Name, last_Name, phone)Values
-            (id,email_F,fn,ln,phoneNumber);
-END;
-$$;
-
-CREATE OR REPLACE Procedure createAdmin (fn varchar(15),ln varchar(15),password_F varchar(30),email_F varchar(30),phonenumber varchar(14) default NULL)
-	LANGUAGE plpgsql
-	  AS $$
-    DECLARE 
-    id smallInt;
-    BEGIN
-            insert Into account(password) 
-            Values(password_F) returning userID into id;
-            insert into Admin(userId,email,firstName,lastName,phone)Values
-            (id,email_F,fn,ln,phoneNumber);
-END;
-$$;
-CREATE OR REPLACE Procedure createProfessor (fn varchar(15),ln varchar(15),password_F varchar(30),email_F varchar(30),phonenumber varchar(14) default NULL)
-	LANGUAGE plpgsql
-	  AS $$
-    DECLARE 
-    id smallInt;
-    BEGIN
-            insert Into account(password) 
-            Values(password_F) returning userID into id;
-            insert into Professor (userId,email,firstName,lastName,phone)Values
-            (id,email_F,fn,ln,phoneNumber);
-END;
-$$;
-
 ---------------------------------------------------------------------------------------------
 -- Views
 ------ Displaying Tutor for Students OR tutor for tutor
@@ -453,4 +411,3 @@ Create index tutorName on tutor (user_fname, user_lname);
 create index tutorLvl on tutor (tutor_level);
 Create index sessionDate on session (session_date);
 Create index courseTitle on course (course_title);
-
