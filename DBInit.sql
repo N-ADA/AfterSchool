@@ -332,10 +332,10 @@ end;
 $$
 language plpgsql;
 
-DROP TRIGGER IF EXISTS addhourTR ON booking CASCADE;
+DROP TRIGGER IF EXISTS addhourST ON booking CASCADE;
 create trigger addHourTr after insert on booking
 for each row
-execute function addHour();
+execute function addHourStudent();
 
 ---------------------------------------------------------------------------------------------
 -- Views
